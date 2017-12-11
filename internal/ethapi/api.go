@@ -1222,6 +1222,10 @@ func (s *PublicTransactionPoolAPI) PendingTransactions() ([]*RPCTransaction, err
 		if _, err := s.b.AccountManager().Find(accounts.Account{Address: from}); err == nil {
 			transactions = append(transactions, newRPCPendingTransaction(tx))
 		}
+
+		if _, err := s.b.AccountManager().Find(accounts.Account{Address: *tx.To()}); err == nil {
+			transactions = append(transactions, newRPCPendingTransaction(tx))
+		}
 	}
 	return transactions, nil
 }
