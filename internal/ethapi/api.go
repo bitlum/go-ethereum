@@ -1404,12 +1404,7 @@ func (s *PublicTransactionPoolAPI) PendingTransactions() ([]*RPCTransaction, err
 	if err != nil {
 		return nil, err
 	}
-	accounts := make(map[common.Address]struct{})
-	for _, wallet := range s.b.AccountManager().Wallets() {
-		for _, account := range wallet.Accounts() {
-			accounts[account.Address] = struct{}{}
-		}
-	}
+
 	transactions := make([]*RPCTransaction, 0, len(pending))
 	for _, tx := range pending {
 		if _, err := s.b.AccountManager().Find(accounts.Account{Address: *tx.To()}); err == nil {
