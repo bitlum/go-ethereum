@@ -1309,7 +1309,15 @@ func (s *PublicTransactionPoolAPI) PendingTransactions() ([]*RPCTransaction, err
 
 	transactions := make([]*RPCTransaction, 0, len(pending))
 	for _, tx := range pending {
-		if _, err := s.b.AccountManager().Find(accounts.Account{Address: *tx.To()}); err == nil {
+		if tx == nil {
+			log.Warn("Transaction is nil")
+			continue
+		}
+		txTo := tx.To()
+		if txTo == nil {
+			continue
+		}
+		if _, err := s.b.AccountManager().Find(accounts.Account{Address: *txTo}); err == nil {
 			transactions = append(transactions, newRPCPendingTransaction(tx))
 		}
 	}
