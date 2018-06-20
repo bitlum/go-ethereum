@@ -133,7 +133,8 @@ func (s *Server) serveRequest(ctx context.Context, codec ServerCodec, singleShot
 			const size = 64 << 10
 			buf := make([]byte, size)
 			buf = buf[:runtime.Stack(buf, false)]
-			log.Error(string(buf))
+			log.Error(fmt.Sprintf("Panic: %v.\nStacktrace:\n%s",
+				string(buf), err))
 		}
 		s.codecsMu.Lock()
 		s.codecs.Remove(codec)
